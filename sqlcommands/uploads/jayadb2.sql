@@ -325,7 +325,38 @@ select max(items),min(items),floor(avg(items)) from
    inner join  orders using(ordernumber) where customernumber=customers.customernumber group by ordernumber having totalamount >60000);  
  
  
-
+select customername, checknumber ,paymentdate,amount from customers
+   inner join payments using (customernumber);
+   create view customerpayments as select customername,checknumber,paymentdate,amount from customers
+   inner join payments using (customernumber);
+  select * from customerpayments;
+  create view dayofweek (day) as select 'mon'
+union select 'tue'
+union select 'wed'
+union select 'thus'
+union select 'fri'
+union select 'sat'
+union select 'sun';
+select * from dayofweek;
+create view bigsalesorder as 
+select customernumber,customername from customers where exists
+( select ordernumber,sum(priceeach*quantityordered) as totalamount from orderdetails 
+   inner join  orders using(ordernumber) where customernumber=customers.customernumber
+   group by ordernumber having totalamount >57000);  
+   
+   select * from bigsalesorder;
+   select ordernumber,sum(priceeach*quantityordered) as totalamount from orderdetails group by ordernumber;
+   create view salesperorder as select ordernumber,sum(priceeach*quantityordered) as totalamount from orderdetails group by ordernumber;
+	select * from salesperorder;
+   select ordernumber , round(totalamount, 2) as total from salesperorder where totalamount>57000;
+   create view bigsales as select ordernumber , round(totalamount, 2) as total from salesperorder where totalamount>57000;
+   select * from bigsales;
+   
+   show tables;
+   show full tables where table_type='VIEW';
+   rename table salesperorder to orderpersales;
+   drop view dayofweek;
+   
 
 
 
